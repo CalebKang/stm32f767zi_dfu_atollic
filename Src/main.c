@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usbd_dfu.h"
 #include "usb_device.h"
 #include "gpio.h"
 
@@ -46,7 +47,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-#define USBD_DFU_APP_DEFAULT_ADD       0x08008000U /* The first sector (32 KB) is reserved for DFU code */
 pFunction JumpToApplication;
 uint32_t JumpAddress;
 /* USER CODE END PV */
