@@ -46,7 +46,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+#define USBD_DFU_APP_DEFAULT_ADD       0x08008000U /* The first sector (32 KB) is reserved for DFU code */
+pFunction JumpToApplication;
+uint32_t JumpAddress;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -84,7 +86,23 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
+#if 0
+  /* Check if the KEY Button is pressed */
+  if(BSP_PB_GetState(BUTTON_KEY) == 0x00)
+  {
+    /* Test if user code is programmed starting from USBD_DFU_APP_DEFAULT_ADD address */
+    if(((*(__IO uint32_t*)USBD_DFU_APP_DEFAULT_ADD) & 0x2FFE0000 ) == 0x20000000)
+    {
+      /* Jump to user application */
+      JumpAddress = *(__IO uint32_t*) (USBD_DFU_APP_DEFAULT_ADD + 4);
+      JumpToApplication = (pFunction) JumpAddress;
 
+      /* Initialize user application's Stack Pointer */
+      __set_MSP(*(__IO uint32_t*) USBD_DFU_APP_DEFAULT_ADD);
+      JumpToApplication();
+    }
+  }
+#endif
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
